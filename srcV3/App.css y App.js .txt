@@ -1,0 +1,130 @@
+
+LO DE ABAJO ES APP.css HASTA LOS GUIONES -----------
+
+body {
+  background-color: #0a0f32;
+  font-family: 'Comfortaa';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.calculadora {
+  text-align: center;
+  color: white;
+  margin-top: 40px;
+}
+
+input, #resultado, button {
+  margin: 15px;
+  padding: 15px;
+  background: #0a0f32;
+  color: white;
+  border: 3px solid white;
+  font-family: 'Comfortaa';
+  font-size: 1.1em;
+}
+
+input {
+  border-radius: 5px;
+}
+
+#resultado {
+  border-radius: 5px;
+  display: block;
+  width: calc(100% - 30px);
+}
+
+button {
+  border-radius: 5px;
+  width: 120px;
+  height: 50px;
+}
+
+.botones {
+  display: flex;
+  justify-content: center;
+}
+
+
+#sumar { border-color: #6cc9ff; box-shadow: 0 0 5px #6cc9ff, 0 0 15px #6cc9ff, 0 0 30px #6cc9ff, 0 0 60px #6cc9ff; }
+#restar { border-color: #ad4ffa; box-shadow: 0 0 5px #ad4ffa, 0 0 15px #ad4ffa, 0 0 30px #ad4ffa, 0 0 60px #ad4ffa; }
+#multiplicar { border-color: #ff86e1; box-shadow: 0 0 5px #ff86e1, 0 0 15px #ff86e1, 0 0 30px #ff86e1, 0 0 60px #ff86e1; }
+#dividir { border-color: #ffeb3b; box-shadow: 0 0 5px #ffeb3b, 0 0 15px #ffeb3b, 0 0 30px #ffeb3b, 0 0 60px #ffeb3b; }
+
+
+----------------------------------------------------------------------------------------
+
+Esto es App.js 
+
+import React, { useState } from 'react';
+import './App.css';
+
+const Calculadora = () => {
+  const [valor1, setValor1] = useState(0);
+  const [valor2, setValor2] = useState(0);
+  const [resultado, setResultado] = useState('');
+  const [operacionActual, setOperacionActual] = useState(null);
+  const [historial, setHistorial] = useState([]);
+
+  const calcular = () => {
+    let res;
+    switch (operacionActual) {
+      case 'sumar':
+        res = valor1 + valor2;
+        break;
+      case 'restar':
+        res = valor1 - valor2;
+        break;
+      case 'multiplicar':
+        res = valor1 * valor2;
+        break;
+      case 'dividir':
+        res = valor2 !== 0 ? valor1 / valor2 : 'Error: División por cero';
+        break;
+      default:
+        res = 'Selecciona una operación';
+    }
+    setResultado(res);
+
+    // Agregar la operación al historial
+    const expresion = `${valor1} ${operacionActual} ${valor2}`;
+    setHistorial([...historial, { expresion, resultado: res }]);
+  };
+
+  const establecerOperacion = (operacion) => {
+    setOperacionActual(operacion);
+  };
+
+  return (
+    <div className="calculadora">
+      <h1>Calculadora V.3</h1>
+      <input
+        type="number"
+        value={valor1}
+        placeholder="Ingresa un número"
+        onChange={(e) => setValor1(parseFloat(e.target.value) || 0)}
+      />
+      <input
+        type="number"
+        value={valor2}
+        placeholder="Ingresa otro número"
+        onChange={(e) => setValor2(parseFloat(e.target.value) || 0)}
+      />
+      <div id="resultado">Resultado: {resultado}</div>
+      <div className="botones">
+        {/* Botones de operaciones */}
+        <button id="sumar" onClick={() => { establecerOperacion('sumar'); calcular(); }}>Sumar</button>
+        <button id="restar" onClick={() => { establecerOperacion('restar'); calcular(); }}>Restar</button>
+        <button id="multiplicar" onClick={() => { establecerOperacion('multiplicar'); calcular(); }}>Multiplicar</button>
+        <button id="dividir" onClick={() => { establecerOperacion('dividir'); calcular(); }}>Dividir</button>
+        {/* Agrega más botones aquí si es necesario */}
+      </div>
+    </div>
+  );
+};
+
+export default Calculadora;
+
